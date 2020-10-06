@@ -2,11 +2,11 @@
 {% load crispy_forms_tags %}
 {% block content %}
 <div class='container'>
-    <h1>Sign up</h1>
+    <h1>Sign up Employees</h1>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
-        <input type='submit' class='btn bth-default btn-fill' value='Sign Up'></input>
+        <input type='submit' class='btn bth-default' value='Sign Up'></input>
     </form>
     </div>
 
