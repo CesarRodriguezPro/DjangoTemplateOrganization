@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from .forms import OwnerCreateForm, EmployeesCreateForm
-from django.views.generic import CreateView
-from django.http import HttpResponse
+from django.views.generic import CreateView, DetailView
+from .models import User, Profile, Company
 
 
 class RegistrationOwner(CreateView):
@@ -20,4 +20,19 @@ def registration_employees(response):
             # user.profile.company.address = owner_user_company_address
             return redirect("accounts:login")
     return render(response, "accounts/signup_employees.html", {'form': EmployeesCreateForm})
+
+
+///// keep working in make the profile page
+
+def profile_view(request, username):
+    user = User(username=username)
+    profile = Profile(user=user.pk)
+
+    context = {
+        'form': user.first_name,
+        'profile': profile,
+    }
+
+
+    return render(request, "accounts/profile.html", context)
 

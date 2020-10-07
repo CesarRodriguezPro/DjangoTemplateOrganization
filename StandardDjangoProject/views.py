@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
@@ -8,3 +8,6 @@ class UserArea(LoginRequiredMixin, TemplateView):
 
 class Home(TemplateView):
     template_name = "index.html"
+
+
+

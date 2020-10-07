@@ -21,9 +21,9 @@ class OwnerCreateForm(UserCreationForm):
 
 class EmployeesCreateForm(UserCreationForm):
 
-    is_admin = forms.BooleanField()
-    is_manager = forms.BooleanField()
-    is_systemAdmin = forms.BooleanField()
+    is_admin = forms.BooleanField(required=False)
+    is_manager = forms.BooleanField(required=False)
+    is_systemAdmin = forms.BooleanField(required=False)
 
     class Meta:
         fields = ('username', 'email', 'password1', 'password2')
