@@ -2,24 +2,34 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    image = models.ImageField(default='default.jpg', upload_to='profile_pics',null=True, blank=True)
+
+
+class Owner(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+
+
 class Company(models.Model):
-    company_name = models.CharField(max_length=100, unique=True)
-    address = models.CharField(max_length=100)
+    owner = models.ForeignKey(Owner, on_delete=models.CASCADE,null=True)
+    company_name = models.CharField(max_length=100, unique=True, null=True)
+    address = models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return self.company_name
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-    is_owner = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    is_manager = models.BooleanField(default=False)
-    is_systemAdmin = models.BooleanField(default=False)
+class Employee(models.Model):
 
-    def __str__(self):
-        return '{} Profile'.format(self.user.username)
+    STATUS_CHOICES = [
+        ("Admin", "Admin"),
+        ("Manager", "Manager"),
+        ("sysAdmin", "System Admin")
+    ]
+
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE,null=True)
+    role = models.CharField(choices=STATUS_CHOICES, max_length=10,null=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE,null=True)
 
 
