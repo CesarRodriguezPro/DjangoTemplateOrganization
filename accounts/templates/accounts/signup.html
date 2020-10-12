@@ -8,7 +8,6 @@
         {% csrf_token %}
         {{ form|crispy }}
         {{ company|crispy }}
-
         <input type='submit' class='btn btn-primary btn-fill' value='Sign Up'></input>
     </form>
         <small class='text-muted'>Already Have An Account? <a class='ml-2' href="{% url 'accounts:login' %}">Log in</a></small>

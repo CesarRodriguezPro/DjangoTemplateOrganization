@@ -1,24 +1,34 @@
 from django.shortcuts import render, redirect
-from .forms import OwnerCreateForm, EmployeesCreateForm
+from .forms import OwnerCreateForm, EmployeesCreateForm, CompaniesCreateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import User
 
 
 def registration_owner(request):
     if request.method == "POST":
-        form = OwnerCreateForm(request.POST)
-        company = CompanyForm(request.POST)
-        if form.is_valid() and company.is_valid():
-            company.save()
-            form.save()
+        user_form = OwnerCreateForm(request.POST)
+        company = CompaniesCreateForm(request.POST)
+        if user_form.is_valid() and company.is_valid():
+            company_ = company.save(commit=False)
+            user_ = user_form.save(commit=False)
+            user_.is_owner = True  # change the is owner attribute
+            user_.save()
+            # add the owner to the company object
+            owner = User.objects.get(username=user_form.cleaned_data['username'])
+            company_.owner = owner
+            company_.save()
+
             messages.success(request, f'Your Account has been Created! You are now able to log in')
             return redirect("accounts:login")
     else:
-        form = OwnerCreateForm()
+        user_form = OwnerCreateForm()
+        company = CompaniesCreateForm()
 
     context = {
         'title': 'Sign up Owner',
-        'form': form,
+        'form': user_form,
+        'company': company,
     }
     return render(request, "accounts/signup.html", context)
 
@@ -26,17 +36,24 @@ def registration_owner(request):
 @login_required()
 def registration_employees(request):
     if request.method == "POST":
-        form = EmployeesCreateForm(request.POST)
-        if form.is_valid():
-            form.save()
+        user_form = EmployeesCreateForm(request.POST)
+        if user_form.is_valid():
+            user_ = user_form.save(commit=False)
+            current_user = request.user
+            ## keep working in this part to create employees users.
+
+
+
+
+
             messages.success(request, f'Your Account has been Created! You are now able to log in')
             return redirect("accounts:login")
     else:
-        form = EmployeesCreateForm()
+        user_form = EmployeesCreateForm()
 
     context = {
         'title': 'Sign up Employees',
-        'form': form,
+        'form': user_form,
     }
     return render(request, "accounts/signup.html", context)
 
