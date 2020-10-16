@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import OwnerCreateForm, EmployeesCreateForm, CompaniesCreateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from .models import User
+from .models import User, Companies
 
 
 def registration_owner(request):
@@ -12,7 +12,8 @@ def registration_owner(request):
         if user_form.is_valid() and company.is_valid():
             company_ = company.save(commit=False)
             user_ = user_form.save(commit=False)
-            user_.is_owner = True  # change the is owner attribute
+            # change the is owner attribute
+            user_.is_owner = True
             user_.save()
             # add the owner to the company object
             owner = User.objects.get(username=user_form.cleaned_data['username'])
@@ -39,12 +40,6 @@ def registration_employees(request):
         user_form = EmployeesCreateForm(request.POST)
         if user_form.is_valid():
             user_ = user_form.save(commit=False)
-            current_user = request.user
-            ## keep working in this part to create employees users.
-
-
-
-
 
             messages.success(request, f'Your Account has been Created! You are now able to log in')
             return redirect("accounts:login")
